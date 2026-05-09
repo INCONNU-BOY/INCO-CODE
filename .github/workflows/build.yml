@@ -76,6 +76,8 @@ jobs:
         run: ./gradlew assembleDebug --no-daemon --stacktrace
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          JAVA_TOOL_OPTIONS: ""
+          JDK_JAVA_OPTIONS: ""
 
       # ── 12. Renommer l'APK ───────────────────────────────
       - name: ✏️ Rename APK

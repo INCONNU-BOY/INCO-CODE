@@ -29,6 +29,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
 
       # ── 4. Installer les dépendances ─────────────────────
       - name: 📦 Install dependencies
@@ -57,7 +58,7 @@ jobs:
         run: |
           mkdir -p android/gradle/wrapper
           curl -fsSL -o android/gradle/wrapper/gradle-wrapper.jar \
-            https://github.com/gradle/gradle/raw/v8.3.0/gradle/wrapper/gradle-wrapper.jar
+            "https://github.com/gradle/gradle/raw/refs/tags/v8.3.0/gradle/wrapper/gradle-wrapper.jar"
 
       # ── 9. Créer le dossier assets ───────────────────────
       - name: 📁 Create assets folder

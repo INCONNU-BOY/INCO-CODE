@@ -1,0 +1,70 @@
+#!/bin/sh
+# android/gradlew
+# Gradle wrapper script pour INCO CODE
+
+##############################################################################
+# Environment validation
+##############################################################################
+
+# Tenter de définir JAVA_HOME si non défini
+if [ -z "$JAVA_HOME" ] ; then
+    if [ -x "/usr/libexec/java_home" ] ; then
+        JAVA_HOME=`/usr/libexec/java_home`
+        export JAVA_HOME
+    fi
+fi
+
+# Vérifier que java est disponible
+if [ -z "$JAVA_HOME" ] ; then
+    if ! command -v java > /dev/null 2>&1 ; then
+        echo "ERROR: JAVA_HOME is not set and java is not on PATH."
+        exit 1
+    fi
+fi
+
+##############################################################################
+# Gradle wrapper
+##############################################################################
+
+APP_NAME="INCO CODE Gradle"
+APP_BASE_NAME=`basename "$0"`
+
+# Résoudre les liens symboliques
+PRG="$0"
+while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+        PRG="$link"
+    else
+        PRG=`dirname "$PRG"`"/$link"
+    fi
+done
+SAVED="`pwd`"
+cd "`dirname \"$PRG\"`/" >/dev/null
+APP_HOME="`pwd -P`"
+cd "$SAVED" >/dev/null
+
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+
+# Détecter la JVM
+if [ -n "$JAVA_HOME" ] ; then
+    JAVACMD="$JAVA_HOME/bin/java"
+    if [ ! -x "$JAVACMD" ] ; then
+        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME"
+    fi
+else
+    JAVACMD="java"
+fi
+
+# Arguments par défaut
+DEFAULT_JVM_OPTS='"-Xmx4g" "-Xms512m" "-XX:MaxMetaspaceSize=512m" "-XX:+HeapDumpOnOutOfMemoryError" "-Dfile.encoding=UTF-8" "-Duser.country=US" "-Duser.language=en" "-Duser.variant"'
+
+# Collecter les arguments
+set -- \
+    "-Dorg.gradle.appname=$APP_BASE_NAME" \
+    -classpath "$CLASSPATH" \
+    org.gradle.wrapper.GradleWrapperMain \
+    "$@"
+
+exec "$JAVACMD" $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "$@"

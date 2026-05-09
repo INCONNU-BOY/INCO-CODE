@@ -1,5 +1,4 @@
-
-       name: 🚀 Build INCO CODE APK
+name: 🚀 Build INCO CODE APK
 
 on:
   push:
@@ -107,4 +106,3 @@ jobs:
           echo "| 🟢 Node | 18 |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📥 **APK disponible dans Artifacts ci-dessus**" >> $GITHUB_STEP_SUMMARY
-   

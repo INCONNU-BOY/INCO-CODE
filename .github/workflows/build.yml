@@ -1,0 +1,98 @@
+name: 🚀 Build INCO CODE APK
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:  
+
+jobs:
+  build-android:
+    name: 📱 Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: ☕ Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # ── 3. Node.js 18 ────────────────────────────────────
+      - name: 🟢 Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # ── 4. Cache Gradle ──────────────────────────────────
+      - name: 📦 Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      # ── 5. Installer les dépendances npm ─────────────────
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      # ── 6. Créer le dossier assets Android ───────────────
+      - name: 📁 Create Android assets folder
+        run: mkdir -p android/app/src/main/assets
+
+      # ── 7. Bundle JS (React Native) ──────────────────────
+      - name: ⚡ Bundle React Native JS
+        run: |
+          npx react-native bundle \
+            --platform android \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output android/app/src/main/assets/index.android.bundle \
+            --assets-dest android/app/src/main/res
+
+      # ── 8. Rendre gradlew exécutable ─────────────────────
+      - name: 🔧 Make gradlew executable
+        run: chmod +x android/gradlew
+
+      # ── 9. Build APK Debug ───────────────────────────────
+      - name: 🔨 Build APK Debug
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      # ── 10. Renommer l'APK ───────────────────────────────
+      - name: ✏️ Rename APK
+        run: |
+          mv android/app/build/outputs/apk/debug/app-debug.apk \
+             android/app/build/outputs/apk/debug/INCO-CODE-v1.0.0-debug.apk
+
+      # ── 11. Upload APK comme artifact GitHub ─────────────
+      - name: 📤 Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: INCO-CODE-APK-debug
+          path: android/app/build/outputs/apk/debug/INCO-CODE-v1.0.0-debug.apk
+          retention-days: 30
+
+      # ── 12. Afficher le résumé ───────────────────────────
+      - name: ✅ Build Summary
+        run: |
+          echo "## ✅ INCO CODE APK Build Réussi!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Info | Valeur |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | 1.0.0 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Type | Debug |" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Android |" >> $GITHUB_STEP_SUMMARY
+          echo "| Node | 18 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Java | 17 |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📥 **Télécharge l'APK dans l'onglet Actions → Artifacts**" >> $GITHUB_STEP_SUMMARY

@@ -34,7 +34,17 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      # ── 5. Cache Gradle ──────────────────────────────────
+      # ── 5. Générer gradle-wrapper.jar via Gradle officiel ─
+      - name: 📥 Setup Gradle Wrapper
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.3'
+
+      - name: 🔧 Generate gradle wrapper jar
+        working-directory: android
+        run: gradle wrapper --gradle-version 8.3
+
+      # ── 6. Cache Gradle ──────────────────────────────────
       - name: 📦 Cache Gradle
         uses: actions/cache@v4
         with:
@@ -44,20 +54,13 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-
 
-      # ── 6. Android SDK ───────────────────────────────────
+      # ── 7. Android SDK ───────────────────────────────────
       - name: 📱 Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # ── 7. Accepter les licences SDK ─────────────────────
+      # ── 8. Accepter les licences SDK ─────────────────────
       - name: ✅ Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
-
-      # ── 8. Télécharger gradle-wrapper.jar ────────────────
-      - name: 📥 Download gradle-wrapper.jar
-        run: |
-          mkdir -p android/gradle/wrapper
-          curl -fsSL -o android/gradle/wrapper/gradle-wrapper.jar \
-            "https://github.com/gradle/gradle/raw/refs/tags/v8.3.0/gradle/wrapper/gradle-wrapper.jar"
 
       # ── 9. Créer le dossier assets ───────────────────────
       - name: 📁 Create assets folder

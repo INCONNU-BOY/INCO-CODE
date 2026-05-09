@@ -34,15 +34,26 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      # ── 5. Gradle wrapper JAR (extrait du zip officiel) ──
-      - name: 📥 Download gradle-wrapper.jar
+      # ── 5. Gradle wrapper JAR depuis node_modules ────────
+      - name: 📥 Setup gradle-wrapper.jar
         run: |
           mkdir -p android/gradle/wrapper
-          curl -fsSL -o /tmp/gradle-8.3-bin.zip \
-            "https://services.gradle.org/distributions/gradle-8.3-bin.zip"
-          unzip -j /tmp/gradle-8.3-bin.zip \
-            "gradle-8.3/lib/gradle-wrapper.jar" \
-            -d android/gradle/wrapper/
+          # Le JAR est fourni par react-native dans node_modules
+          WRAPPER_JAR=$(find node_modules -name "gradle-wrapper.jar" 2>/dev/null | head -1)
+          if [ -n "$WRAPPER_JAR" ]; then
+            cp "$WRAPPER_JAR" android/gradle/wrapper/gradle-wrapper.jar
+            echo "✅ Copied from: $WRAPPER_JAR"
+          else
+            echo "⚠️ Not found in node_modules, downloading from Gradle..."
+            curl -fsSL -o /tmp/gradle-8.3-bin.zip \
+              "https://services.gradle.org/distributions/gradle-8.3-bin.zip"
+            echo "📦 Contents of zip (wrapper related):"
+            unzip -l /tmp/gradle-8.3-bin.zip | grep -i "wrapper"
+            WRAPPER_PATH=$(unzip -l /tmp/gradle-8.3-bin.zip | grep -i "wrapper.*jar" | awk '{print $4}' | head -1)
+            echo "Found: $WRAPPER_PATH"
+            unzip -j /tmp/gradle-8.3-bin.zip "$WRAPPER_PATH" -d android/gradle/wrapper/
+            mv android/gradle/wrapper/$(basename "$WRAPPER_PATH") android/gradle/wrapper/gradle-wrapper.jar
+          fi
           echo "✅ JAR size: $(ls -lh android/gradle/wrapper/gradle-wrapper.jar)"
 
       # ── 6. Cache Gradle ──────────────────────────────────

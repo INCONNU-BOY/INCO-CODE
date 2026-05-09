@@ -52,11 +52,18 @@ jobs:
       - name: ✅ Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
 
-      # ── 8. Créer le dossier assets ───────────────────────
+      # ── 8. Télécharger gradle-wrapper.jar ────────────────
+      - name: 📥 Download gradle-wrapper.jar
+        run: |
+          mkdir -p android/gradle/wrapper
+          curl -fsSL -o android/gradle/wrapper/gradle-wrapper.jar \
+            https://github.com/gradle/gradle/raw/v8.3.0/gradle/wrapper/gradle-wrapper.jar
+
+      # ── 9. Créer le dossier assets ───────────────────────
       - name: 📁 Create assets folder
         run: mkdir -p android/app/src/main/assets
 
-      # ── 9. Bundle React Native JS ────────────────────────
+      # ── 10. Bundle React Native JS ───────────────────────
       - name: ⚡ Bundle JS
         run: |
           npx react-native bundle \
@@ -66,11 +73,11 @@ jobs:
             --bundle-output android/app/src/main/assets/index.android.bundle \
             --assets-dest android/app/src/main/res
 
-      # ── 10. Permissions gradlew ──────────────────────────
+      # ── 11. Permissions gradlew ──────────────────────────
       - name: 🔧 Make gradlew executable
         run: chmod +x android/gradlew
 
-      # ── 11. Build APK Debug ──────────────────────────────
+      # ── 12. Build APK Debug ──────────────────────────────
       - name: 🔨 Build APK
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon --stacktrace
@@ -79,13 +86,13 @@ jobs:
           JAVA_TOOL_OPTIONS: ""
           JDK_JAVA_OPTIONS: ""
 
-      # ── 12. Renommer l'APK ───────────────────────────────
+      # ── 13. Renommer l'APK ───────────────────────────────
       - name: ✏️ Rename APK
         run: |
           mv android/app/build/outputs/apk/debug/app-debug.apk \
              android/app/build/outputs/apk/debug/INCO-CODE-v1.0.0.apk
 
-      # ── 13. Upload Artifact ──────────────────────────────
+      # ── 14. Upload Artifact ──────────────────────────────
       - name: 📤 Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -93,7 +100,7 @@ jobs:
           path: android/app/build/outputs/apk/debug/INCO-CODE-v1.0.0.apk
           retention-days: 30
 
-      # ── 14. Résumé final ─────────────────────────────────
+      # ── 15. Résumé final ─────────────────────────────────
       - name: ✅ Summary
         run: |
           echo "## ✅ INCO CODE — Build réussi!" >> $GITHUB_STEP_SUMMARY

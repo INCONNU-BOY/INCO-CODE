@@ -34,15 +34,16 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      # ── 5. Télécharger gradle-wrapper.jar depuis Maven ───
+      # ── 5. Gradle wrapper JAR (extrait du zip officiel) ──
       - name: 📥 Download gradle-wrapper.jar
         run: |
           mkdir -p android/gradle/wrapper
-          curl -fsSL -o android/gradle/wrapper/gradle-wrapper.jar \
-            "https://repo1.maven.org/maven2/org/gradle/gradle-wrapper/8.3/gradle-wrapper-8.3.jar" || \
-          curl -fsSL -o android/gradle/wrapper/gradle-wrapper.jar \
-            "https://repo.gradle.org/gradle/libs-releases/org/gradle/gradle-wrapper/8.3/gradle-wrapper-8.3.jar"
-          echo "JAR size: $(ls -lh android/gradle/wrapper/gradle-wrapper.jar)"
+          curl -fsSL -o /tmp/gradle-8.3-bin.zip \
+            "https://services.gradle.org/distributions/gradle-8.3-bin.zip"
+          unzip -j /tmp/gradle-8.3-bin.zip \
+            "gradle-8.3/lib/gradle-wrapper.jar" \
+            -d android/gradle/wrapper/
+          echo "✅ JAR size: $(ls -lh android/gradle/wrapper/gradle-wrapper.jar)"
 
       # ── 6. Cache Gradle ──────────────────────────────────
       - name: 📦 Cache Gradle

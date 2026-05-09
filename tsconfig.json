@@ -2,18 +2,8 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["app/*"],
-      "@components/*": ["app/components/*"],
-      "@screens/*": ["app/screens/*"],
-      "@utils/*": ["app/utils/*"],
-      "@storage/*": ["app/storage/*"],
-      "@themes/*": ["app/themes/*"],
-      "@assets/*": ["app/assets/*"]
-    }
+    "baseUrl": "."
   },
   "include": ["app/**/*", "index.js", "App.tsx"],
   "exclude": ["node_modules", "android", "ios"]
 }
-

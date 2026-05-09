@@ -30,7 +30,11 @@ jobs:
         with:
           node-version: '18'
 
-      # ── 4. Cache Gradle ──────────────────────────────────
+      # ── 4. Installer les dépendances ─────────────────────
+      - name: 📦 Install dependencies
+        run: npm install
+
+      # ── 5. Cache Gradle ──────────────────────────────────
       - name: 📦 Cache Gradle
         uses: actions/cache@v4
         with:
@@ -39,10 +43,6 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-
-
-      # ── 5. Installer les dépendances ─────────────────────
-      - name: 📦 Install dependencies
-        run: npm install
 
       # ── 6. Android SDK ───────────────────────────────────
       - name: 📱 Setup Android SDK

@@ -76,7 +76,6 @@ jobs:
         run: ./gradlew assembleDebug --no-daemon --stacktrace
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          GRADLE_OPTS: "-Xmx2048m -XX:MaxMetaspaceSize=512m"
 
       # ── 12. Renommer l'APK ───────────────────────────────
       - name: ✏️ Rename APK

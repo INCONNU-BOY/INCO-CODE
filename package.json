@@ -33,7 +33,6 @@
     "react-native-blur": "^4.4.0",
     "react-native-toast-message": "^2.2.0",
     "react-native-modal": "^13.0.1",
-    "react-native-animated-placeholder": "^1.0.3",
     "uuid": "^9.0.1",
     "highlight.js": "^11.9.0",
     "jszip": "^3.10.1",
@@ -60,4 +59,3 @@
     "preset": "react-native"
   }
 }
-

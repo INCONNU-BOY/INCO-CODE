@@ -1,0 +1,54 @@
+# INCO CODE — .gitignore
+
+# Dépendances
+node_modules/
+.yarn/
+
+# Build Android
+android/app/build/
+android/.gradle/
+android/app/release/
+*.apk
+*.aab
+
+# Build iOS
+ios/build/
+ios/Pods/
+*.ipa
+
+# Environnement
+.env
+.env.local
+
+# Metro bundler
+.metro-health-check*
+
+# Expo (si utilisé)
+.expo/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# React Native
+__pycache__/
+.buck/
+buck-out/
+

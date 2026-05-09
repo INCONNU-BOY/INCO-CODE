@@ -57,8 +57,8 @@ else
     JAVACMD="java"
 fi
 
-# Arguments par défaut
-DEFAULT_JVM_OPTS='"-Xmx4g" "-Xms512m" "-XX:MaxMetaspaceSize=512m" "-XX:+HeapDumpOnOutOfMemoryError" "-Dfile.encoding=UTF-8" "-Duser.country=US" "-Duser.language=en" "-Duser.variant"'
+# Arguments par défaut (sans guillemets doubles autour des valeurs)
+DEFAULT_JVM_OPTS="-Xmx2048m -Xms512m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en"
 
 # Collecter les arguments
 set -- \

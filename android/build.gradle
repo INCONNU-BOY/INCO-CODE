@@ -14,10 +14,9 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.1.4")
-        classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        // react-native-gradle-plugin SUPPRIMÉ — conflit avec includeBuild dans settings.gradle
     }
 }
 
 apply plugin: "com.facebook.react.rootproject"
-
